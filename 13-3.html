@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>13-3 字体图标底部导航</title>
+    <link rel="stylesheet" href="font/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f6f8;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            color: #333;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 14px 0;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .content {
+            padding: 16px;
+            /* 预留底部导航高度，避免内容被遮挡 */
+            padding-bottom: 80px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 底部导航：全屏宽度、固定在底部、移动端自适应 */
+        .tabbar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            background: #fff;
+            border-top: 1px solid #e8e8e8;
+            /* iPhone 底部安全区适配 */
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 100;
+        }
+
+        .tab-item {
+            flex: 1;
+            /* 四项等分，宽度自适应 */
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0 6px;
+            color: #7a7e83;
+            text-decoration: none;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .tab-item .icon-wrap {
+            position: relative;
+            width: 28px;
+            height: 28px;
+            margin-bottom: 3px;
+        }
+
+        .tab-item .iconfont {
+            font-size: 24px;
+            line-height: 28px;
+            display: block;
+            text-align: center;
+        }
+
+        .tab-item .tab-text {
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        .tab-item.active {
+            color: #4a6cf7;
+        }
+
+        /* 数字徽章 */
+        .badge {
+            position: absolute;
+            top: -6px;
+            left: 14px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            border-radius: 999px;
+            background: #f04438;
+            color: #fff;
+            font-size: 10px;
+            line-height: 16px;
+            text-align: center;
+            font-style: normal;
+            box-shadow: 0 0 0 2px #fff;
+        }
+
+        /* 右上角红点 */
+        .dot {
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #f04438;
+            box-shadow: 0 0 0 2px #fff;
+        }
+
+        /* 窄屏缩小、宽屏限制内容宽度，体现自适应 */
+        @media screen and (max-width: 360px) {
+            .tab-item .iconfont {
+                font-size: 22px;
+            }
+
+            .tab-item .tab-text {
+                font-size: 10px;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .content {
+                max-width: 480px;
+                margin: 0 auto;
+                padding-bottom: 90px;
+            }
+
+            .tabbar {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-title">13-3 字体图标底部导航（iconfont）</div>
+
+    <div class="content">
+        <div class="card">移动端全屏宽度底部导航，四项等分自适应。</div>
+        <div class="card">图标使用 iconfont 字体：&lt;span class="iconfont icon-shouye"&gt;&lt;/span&gt;</div>
+        <div class="card">导航包含数字徽章与图标右上角红点。</div>
+        <div class="card">缩放浏览器窗口宽度试试自适应效果。</div>
+    </div>
+
+    <nav class="tabbar">
+        <div class="tab-item active" data-tab="home">
+            <div class="icon-wrap">
+                <span class="iconfont icon-shouye"></span>
+                <span class="dot"></span>
+            </div>
+            <span class="tab-text">首页</span>
+        </div>
+        <div class="tab-item" data-tab="discover">
+            <div class="icon-wrap">
+                <span class="iconfont icon-faxian1"></span>
+                <span class="badge">8</span>
+            </div>
+            <span class="tab-text">发现</span>
+        </div>
+        <div class="tab-item" data-tab="shop">
+            <div class="icon-wrap">
+                <span class="iconfont icon-shangcheng"></span>
+                <span class="badge">99+</span>
+            </div>
+            <span class="tab-text">商城</span>
+        </div>
+        <div class="tab-item" data-tab="mine">
+            <div class="icon-wrap">
+                <span class="iconfont icon-wode"></span>
+                <span class="dot"></span>
+            </div>
+            <span class="tab-text">我的</span>
+        </div>
+    </nav>
+
+    <script>
+        var items = document.querySelectorAll('.tab-item');
+        items.forEach(function (item) {
+            item.addEventListener('click', function () {
+                items.forEach(function (el) {
+                    el.classList.remove('active');
+                });
+                item.classList.add('active');
+                // 点击后清除该项的红点/徽章
+                var dot = item.querySelector('.dot');
+                var badge = item.querySelector('.badge');
+                if (dot) dot.style.display = 'none';
+                if (badge) badge.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

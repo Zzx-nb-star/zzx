@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一左一右</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .title{
+            width: 500px;
+            height: 33px;
+            line-height: 33px;
+            padding-left: 16px;
+            padding-right:10px;
+            margin: 50px;
+        }
+        .title h2{
+            font-size: 20px;
+            color: #039;
+        }
+        .title a{
+            font-size: 12px;
+            color: #999;
+            text-decoration: none;
+        }
+        /* 第一个：flex左右分开 */
+        .title:first-child{
+            border:1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* 第二个：h2占剩余空间 */
+        .title:nth-child(2){
+            display: flex;
+            border:1px solid #ccc;
+            align-items: center;
+        }
+        .title:nth-child(2) h2{
+            flex-grow: 1;
+        }
+        /* 第三个：相对+绝对定位，底部蓝色边框 */
+        .title:nth-child(3) {
+            position: relative;
+            border-bottom:2px solid #039;
+        }
+        .title:nth-child(3) a{
+            position: absolute;
+            top: 0;
+            right:10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h2>张梓轩标题</h2>
+        <a href="#">更多</a>
+    </div>
+    <div class="title">
+        <h2>张梓轩标题</h2>
+        <a href="#">更多</a>
+    </div>
+    <div class="title">
+        <h2>张梓轩标题</h2>
+        <a href="#">更多</a>
+    </div>
+</body>
+</html>

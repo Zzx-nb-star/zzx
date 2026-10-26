@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10-3</title>
+    <style>
+        :root {
+            font-size: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+            color: #fff;
+            transition: background 0.5s ease;
+        }
+
+        .full-box {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1e1e1e;
+            transition: background 0.5s ease;
+        }
+
+        .content {
+            text-align: center;
+            padding: 1.25rem 2rem;
+            border: 0.0625rem solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 0.75rem;
+        }
+
+        .content h1 {
+            margin: 0;
+            font-size: 2rem;
+            line-height: 1.4;
+            letter-spacing: 0.125rem;
+        }
+
+        @media (max-width: 1200px) {
+            body {
+                background: #2d2d2d;
+            }
+            .full-box {
+                background: #3b3b3b;
+            }
+            .content h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            body {
+                background: #4b2c2c;
+            }
+            .full-box {
+                background: #5a3b3b;
+            }
+            .content h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                background: #2b4a3d;
+            }
+            .full-box {
+                background: #365d4f;
+            }
+            .content {
+                padding: 1rem 1.5rem;
+            }
+            .content h1 {
+                font-size: 1.2rem;
+                letter-spacing: 0.0625rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            body {
+                background: #2f3d63;
+            }
+            .full-box {
+                background: #425a8d;
+            }
+            .content h1 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="full-box">
+        <div class="content">
+            <h1>张梓轩</h1>
+        </div>
+    </div>
+</body>
+</html>

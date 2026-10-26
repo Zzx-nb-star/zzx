@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>311张梓轩的《高级网页设计》课堂实践</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background: linear-gradient(135deg, #edf6ff 0%, #f9f7ff 35%, #fff8f1 100%);
+      color: #1e2d3d;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(128,157,216,0.25);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 28px 60px rgba(74, 104, 160, 0.15);
+    }
+
+    .header {
+      padding: 44px 40px 32px;
+      color: #fff;
+      background: linear-gradient(120deg, #0d3d76, #2d6cdf 35%, #0ea7d8 100%);
+      position: relative;
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+      pointer-events: none;
+    }
+
+    .header h1, .header p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+    }
+
+    .header h1 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      letter-spacing: 2px;
+    }
+
+    .header p {
+      margin-top: 12px;
+      font-size: 1.04rem;
+      opacity: 0.96;
+      letter-spacing: 1px;
+    }
+
+    .main {
+      padding: 28px 40px 40px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #f8fbff, #f1f6ff);
+      border: 1px solid #dfeafb;
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 10px 18px rgba(90, 116, 180, 0.08);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #1b5ec7;
+      font-size: 1.02rem;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .link-card {
+      display: block;
+      text-decoration: none;
+      color: #1d2c3f;
+      background: linear-gradient(180deg, #fff, #f2f7ff);
+      border: 1px solid #dfeaff;
+      border-radius: 18px;
+      padding: 20px 18px;
+      transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+      box-shadow: 0 12px 24px rgba(84, 111, 168, 0.07);
+    }
+
+    .link-card:hover {
+      transform: translateY(-3px);
+      border-color: #85aefb;
+      box-shadow: 0 18px 30px rgba(62, 94, 156, 0.12);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eaf2ff;
+      color: #245db9;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .link-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.18rem;
+      color: #143e77;
+    }
+
+    .link-card p {
+      margin: 0;
+      line-height: 1.7;
+      color: #55708d;
+      font-size: 0.92rem;
+    }
+
+    .prompt-box {
+      margin-top: 30px;
+      padding: 18px 20px;
+      border-left: 5px solid #2d7af0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f4f8ff, #fffaf5);
+      color: #2e415d;
+      line-height: 1.9;
+      box-shadow: inset 0 0 0 1px rgba(45, 122, 240, 0.08);
+    }
+
+    .prompt-box strong {
+      color: #1a4ea4;
+    }
+
+    @media (max-width: 640px) {
+      .header, .main {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .container {
+        margin: 20px auto;
+        border-radius: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>311张梓轩的《高级网页设计》课堂实践</h1>
+      <p>本目录下所有 HTML 页面导航主页，汇总课堂实践成果与作业展示。</p>
+    </header>
+
+    <main class="main">
+      <section class="info-grid">
+        <div class="card">
+          <strong>学生信息</strong>
+          学号：311 &nbsp;&nbsp; 姓名：张梓轩 &nbsp;&nbsp; 班级：计算机24003
+        </div>
+        <div class="card">
+          <strong>课程名称</strong>
+          《高级网页设计》课堂实践
+        </div>
+        <div class="card">
+          <strong>技术说明</strong>
+          使用原生 HTML + CSS 编写，无 CDN 依赖
+        </div>
+      </section>
+
+      <section class="links">
+        <a class="link-card" href="2-1.html" target="_blank">
+          <span class="tag">页面 1</span>
+          <h3>2-1.html</h3>
+          <p>基础 HTML 页面练习，展示网页结构与内容布局。</p>
+        </a>
+
+        <a class="link-card" href="2-2.html" target="_blank">
+          <span class="tag">页面 2</span>
+          <h3>2-2.html</h3>
+          <p>进一步扩展页面设计，完成内容排版与常用标签练习。</p>
+        </a>
+
+        <a class="link-card" href="3-1 form.html" target="_blank">
+          <span class="tag">页面 3</span>
+          <h3>3-1 form.html</h3>
+          <p>表单元素实践，包含文本框、按钮等常用输入控件。</p>
+        </a>
+
+        <a class="link-card" href="3-2 css.html" target="_blank">
+          <span class="tag">页面 4</span>
+          <h3>3-2 css.html</h3>
+          <p>CSS 基础样式应用，展示字体、颜色、边框和布局控制。</p>
+        </a>
+
+        <a class="link-card" href="4-1css2.html" target="_blank">
+          <span class="tag">页面 5</span>
+          <h3>4-1css2.html</h3>
+          <p>CSS2 进阶实例，演示群组选择器和后代选择器。</p>
+        </a>
+
+        <a class="link-card" href="5-1 层叠与继承.html" target="_blank">
+          <span class="tag">页面 6</span>
+          <h3>5-1 层叠与继承.html</h3>
+          <p>层叠与继承的 CSS 练习，体现样式优先级与继承特性。</p>
+        </a>
+
+        <a class="link-card" href="5-2 .html" target="_blank">
+          <span class="tag">页面 7</span>
+          <h3>5-2 .html</h3>
+          <p>相关 CSS 进阶样式练习，扩展层叠与继承理解。</p>
+        </a>
+
+        <a class="link-card" href="6-1.html" target="_blank">
+          <span class="tag">页面 8</span>
+          <h3>6-1.html</h3>
+          <p>Flex 布局练习，学习元素居中与多种排列方式。</p>
+        </a>
+
+        <a class="link-card" href="6-2.html" target="_blank">
+          <span class="tag">页面 9</span>
+          <h3>6-2.html</h3>
+          <p>标题栏左右分布与布局设计，练习使用 flex 与定位。</p>
+        </a>
+
+        <a class="link-card" href="7-1 上图下文.html" target="_blank">
+          <span class="tag">页面 10</span>
+          <h3>7-1 上图下文.html</h3>
+          <p>图文混排页面，运用布局实现“上图下文”效果。</p>
+        </a>
+
+        <a class="link-card" href="7-2.html" target="_blank">
+          <span class="tag">页面 11</span>
+          <h3>7-2.html</h3>
+          <p>资讯列表卡片布局，体现列表、图片和信息整合设计。</p>
+        </a>
+      </section>
+
+      <div class="prompt-box">
+        <strong>提示词：</strong>
+        “创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用cdn，新页面名称为index.html，主题为311张梓轩的《高级网页设计》课堂实践，美化页面，页面中包括本提示词。”
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+p{
+    color: green;
+}
+h2{
+    background-color: blue;
+    color: white;
+    /* 圆角 */
+    border-radius: 10px;
+}

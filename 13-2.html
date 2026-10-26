@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13-2 Lucide SVG 图标</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: #f0f2f5;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin: 0 0 8px;
+        }
+
+        .sub {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 22px 10px 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .item svg {
+            width: 32px;
+            height: 32px;
+            color: #4a6cf7;
+        }
+
+        .item .name {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .demo {
+            max-width: 900px;
+            margin: 30px auto 0;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .demo h2 {
+            font-size: 16px;
+            margin: 0 0 16px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .row:last-child {
+            margin-bottom: 0;
+        }
+
+        .label {
+            width: 90px;
+            color: #999;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .s16 svg { width: 16px; height: 16px; }
+        .s24 svg { width: 24px; height: 24px; }
+        .s40 svg { width: 40px; height: 40px; }
+        .s64 svg { width: 64px; height: 64px; }
+
+        .c-red svg { color: #e54545; }
+        .c-green svg { color: #2ea44f; }
+        .c-orange svg { color: #f5a623; }
+        .c-purple svg { color: #7c3aed; }
+
+        .spin svg {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .badge {
+            position: relative;
+            display: inline-block;
+        }
+
+        .badge::after {
+            content: "3";
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #e54545;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1;
+            padding: 3px 6px;
+            border-radius: 999px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lucide SVG 图标</h1>
+    <p class="sub">通过 lucide.createIcons() 将 &lt;i data-lucide="house"&gt; 替换为内联 SVG</p>
+
+    <div class="grid">
+        <div class="item"><i data-lucide="house"></i><div class="name">house</div></div>
+        <div class="item"><i data-lucide="user"></i><div class="name">user</div></div>
+        <div class="item"><i data-lucide="mail"></i><div class="name">mail</div></div>
+        <div class="item"><i data-lucide="settings"></i><div class="name">settings</div></div>
+        <div class="item"><i data-lucide="search"></i><div class="name">search</div></div>
+        <div class="item"><i data-lucide="heart"></i><div class="name">heart</div></div>
+        <div class="item"><i data-lucide="star"></i><div class="name">star</div></div>
+        <div class="item"><i data-lucide="bell"></i><div class="name">bell</div></div>
+        <div class="item"><i data-lucide="camera"></i><div class="name">camera</div></div>
+        <div class="item"><i data-lucide="music"></i><div class="name">music</div></div>
+        <div class="item"><i data-lucide="download"></i><div class="name">download</div></div>
+        <div class="item"><i data-lucide="trash-2"></i><div class="name">trash-2</div></div>
+        <div class="item"><i data-lucide="pencil"></i><div class="name">pencil</div></div>
+        <div class="item"><i data-lucide="check"></i><div class="name">check</div></div>
+        <div class="item"><i data-lucide="x"></i><div class="name">x</div></div>
+        <div class="item"><i data-lucide="arrow-right"></i><div class="name">arrow-right</div></div>
+        <div class="item"><i data-lucide="info"></i><div class="name">info</div></div>
+        <div class="item"><i data-lucide="triangle-alert"></i><div class="name">triangle-alert</div></div>
+        <div class="item"><i data-lucide="lock"></i><div class="name">lock</div></div>
+        <div class="item"><i data-lucide="share-2"></i><div class="name">share-2</div></div>
+        <div class="item spin"><i data-lucide="loader-circle"></i><div class="name">loader-circle</div></div>
+        <div class="item"><i data-lucide="github"></i><div class="name">github</div></div>
+        <div class="item"><i data-lucide="circle-check"></i><div class="name">circle-check</div></div>
+        <div class="item"><i data-lucide="moon"></i><div class="name">moon</div></div>
+        <div class="item"><i data-lucide="sun"></i><div class="name">sun</div></div>
+        <div class="item"><i data-lucide="cloud"></i><div class="name">cloud</div></div>
+        <div class="item"><i data-lucide="map-pin"></i><div class="name">map-pin</div></div>
+        <div class="item"><i data-lucide="calendar"></i><div class="name">calendar</div></div>
+        <div class="item">
+            <span class="badge"><i data-lucide="bell"></i></span>
+            <div class="name">徽标示例</div>
+        </div>
+    </div>
+
+    <div class="demo">
+        <h2>SVG 图标特性演示</h2>
+        <div class="row">
+            <span class="label">大小 (width/height)</span>
+            <span class="s16"><i data-lucide="camera"></i></span>
+            <span class="s24"><i data-lucide="camera"></i></span>
+            <span class="s40"><i data-lucide="camera"></i></span>
+            <span class="s64"><i data-lucide="camera"></i></span>
+        </div>
+        <div class="row">
+            <span class="label">颜色 (color)</span>
+            <span class="c-red"><i data-lucide="heart"></i></span>
+            <span class="c-green"><i data-lucide="shield"></i></span>
+            <span class="c-orange"><i data-lucide="zap"></i></span>
+            <span class="c-purple"><i data-lucide="rocket"></i></span>
+        </div>
+        <div class="row">
+            <span class="label">跟随文字</span>
+            <span style="font-size: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                <i data-lucide="search"></i> 搜索
+            </span>
+            <span style="font-size: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                <i data-lucide="download"></i> 下载
+            </span>
+            <span style="font-size: 20px; display: inline-flex; align-items: center; gap: 6px;">
+                <span class="spin" style="display: inline-flex;"><i data-lucide="loader-circle"></i></span> 加载中...
+            </span>
+        </div>
+    </div>
+
+    <script src="cdn/lucide/lucide.min.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

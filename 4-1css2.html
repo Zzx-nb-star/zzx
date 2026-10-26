@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h2,h3,p{
+            padding: 0px;
+            margin: 0px;
+        } 
+        /* 群组选择器 */
+        #box {
+            padding: 8px;
+            margin: 20px;
+            border: 1px solid #ccc;
+            font-size: 12px;
+            width: 480px;
+        }
+        #box h3 {
+            /* 字体大小16px */
+            font-size: 16px;
+            /* 行高33px */
+            line-height: 33px;
+            /* 居中 */
+            text-align: center;
+            /* 颜色 #034 */
+            color: #034;
+            /* 字间距 */
+            letter-spacing: 3px;    
+        }
+        #box p{
+            /* 颜色 #666 */
+            color: #666;
+            /* 首行空2格 */
+            text-indent: 2em;
+            /* 行高150% */
+            line-height: 150%;
+        }
+        #box a{
+            /* 颜色 #c00 */
+            color: #c00;
+            /* 下划线 */
+            text-decoration: none;
+        }
+
+        /* ========== 扩展样式 ========== */
+        /* 2.h2黑底白字、居中、行高150% */
+        h2 {
+            background-color: #000;
+            color: #fff;
+            padding: 4px;
+            text-align: center;
+            line-height: 150%;
+        }
+        /* 1.学号姓名班级蓝色加粗，用一个选择器 */
+        .info {
+            color: blue;
+            font-weight: bold;
+        }
+        /* 3.知识点蓝底白字 */
+        .knowledge {
+            background-color: blue;
+            color: white;
+            padding: 0 3px;
+        }
+    </style>
+</head>
+<body>
+    <h2>css2群组选择器和后代选择器</h2>
+     <div id="box">
+         <h3>CSS进阶</h3>
+         <p><span class="info">学号：311 姓名：张梓轩 班级：计算机24003</span> 《高级网页设计》设计的学习难度：中等，
+             本实例的<span class="knowledge">知识点：css2群组选择器和后代选择器</span>
+             <a href="#">【更多】</a>
+         </p>
+         <p>CSS属性</p>
+     </div>
+</body>
+</html>

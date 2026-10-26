@@ -1,0 +1,16 @@
+# Trae 本地配置与缓存
+.trae/*
+!.trae/skills/
+.trae-cn/
+
+# 系统缓存
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器临时文件
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

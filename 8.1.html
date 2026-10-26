@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css3</title>
+    <style>
+        .main{
+            display: flex;
+            flex-wrap: wrap;
+            margin: 10px;
+        }
+        .box{
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #333;
+            transition: all 0.6s ease;
+            box-sizing: border-box;
+
+        }
+        .box:first-child:hover{
+            background-color: red;
+            color: white;
+            font-size: 50px;
+            
+        }
+        .box:nth-child(2):hover{
+            border-radius: 50%;
+            border-width: 10px;
+            background-color: blue;
+            color: white;
+            font-size: 50px;
+        }
+        .box:nth-child(3):hover{
+            box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
+            background-color: yellow;
+            color: white;
+            font-size: 50px;
+        }
+        .box:nth-of-type(4):hover{
+            text-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+            background-color: green;
+            color: white;
+            font-size: 50px;
+        }
+        .box:nth-of-type(5):hover{
+            background-image: linear-gradient(to right, red, blue);
+            background-color: orange;
+            color: white;
+            font-size: 50px;
+        }
+        .box:nth-of-type(6):hover{
+            background: radial-gradient(#fff,#ccc,#000);
+            background-color: purple;
+            color: white;
+            font-size: 50px;
+        }
+        .box:nth-of-type(7):hover{
+            transform:scale(0,5)
+        }
+        .box:nth-of-type(8):hover{
+            transform:translate(-150px,150px)
+        }
+        .box:nth-of-type(9):hover{
+            transform:rotateX(-180deg)
+        }
+        .box:nth-of-type(10):hover{
+            transform:skewX(20deg) translateY(50px)
+        }
+        .box:nth-last-child:hover::before{
+            content: "*";
+            color: red;
+           
+        }
+       /* 扩展1:第12个盒子，鼠标在上面时显示自己的名字，要求名字深色背景白色文字，水平垂直居中 */
+/* 扩展1:第12个盒子，鼠标在上面时显示自己的名字，要求名字深色背景白色文字，水平垂直居中 */
+        .box{
+             position: relative;
+            }
+    .box:nth-child(12):hover::after{
+    content:"张梓轩";
+    display:block;
+    padding:5px 10px;
+    font-size:16px;
+    background-color:#000;
+    color:#fff;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+        }
+        .box:nth-child(3n):hover{
+    border:3px solid red;
+    }
+
+    /* 扩展2：鼠标在偶数个盒子上时，自定义效果 */
+    .box:nth-child(even):hover{
+    background-color: #27ae60;
+    color: #fff;
+    }
+
+    </style>
+
+
+
+    </style>
+</head>
+<body>
+    <div class="main">
+         <div class="box">1</div>
+         <div class="box">2</div>
+         <div class="box">3</div>
+         <div class="box">4</div>
+         <div class="box">5</div>
+         <div class="box">6</div>
+         <div class="box">7</div>
+         <div class="box">8</div>
+         <div class="box">9</div>
+         <div class="box">10</div>
+         <div class="box">11</div>
+         <div class="box">12</div>
+
+    </div>
+</body>
+</html>

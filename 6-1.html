@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .flex{
+            display: flex;
+            gap:20px; /* 四个盒子之间间距 */
+            padding:20px;
+        }
+        .flex li{ 
+            width: 220px;
+            height: 220px;
+            border: 1px solid #333;
+            list-style: none;
+            padding:10px;
+        }
+        .flex .box{
+            width: 80px;
+            height: 80px;
+            background-color: #f2f3f4;
+            border:1px solid #666;
+        }
+        .flex .box1{
+            width: 200px;
+            height: 80px;
+            background-color: #f2f3f4;
+            border:1px solid #666;
+        }
+
+        /* ========== 第一个li：单个方块居中 ========== */
+        .flex li:nth-child(1){
+            display: flex;
+            justify-content: center; /*水平居中*/
+            align-items: center;     /*垂直居中*/
+        }
+
+        /* ========== 第二个li：两个方块上下排列 ========== */
+        .flex li:nth-child(2){
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap:10px;
+        }
+
+        /* ========== 第三个li：2行2列四格 ========== */
+        .flex li:nth-child(3){
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap:10px;
+        }
+        .row{
+            display:flex;
+            gap:10px;
+        }
+
+        /* ========== 第四个li：上1个，下2个 ========== */
+        .flex li:nth-child(4){
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap:10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>张梓轩的flex</h2>
+    <ul class="flex">
+        <!-- 第1个：单个方块居中 -->
+        <li >
+            <div class="box"></div>
+        </li>
+        <!-- 第2个：两个方块上下 -->
+        <li >
+            <div class="box"></div>
+            <div class="box"></div>
+        </li>
+        <!-- 第3个：2×2 四格 -->
+        <li >
+            <div class="row">
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+            <div class="row">
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+        </li>
+        <!-- 第4个：上1下2 -->
+        <li >
+            <div class="box1"></div>
+            <div class="row">
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+        </li>
+    </ul>
+</body>
+</html>
