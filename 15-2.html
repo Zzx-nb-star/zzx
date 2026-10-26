@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>15-2 · JavaScript 程序结构 - 条件与循环 - 张梓轩</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a5f);
+    min-height: 100vh;
+    color: #e2e8f0;
+    padding: 32px 20px;
+  }
+  .author { text-align: center; color: #93c5fd; margin-bottom: 8px; letter-spacing: 2px; }
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 32px;
+    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: rgba(30, 41, 59, 0.85);
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+  }
+  .card-header {
+    padding: 14px 20px;
+    background: linear-gradient(90deg, rgba(96,165,250,0.2), rgba(167,139,250,0.15));
+    border-bottom: 1px solid rgba(96,165,250,0.25);
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #93c5fd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-header .tag {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(96,165,250,0.2);
+    color: #bfdbfe;
+  }
+  .card-body { padding: 18px 20px; }
+  pre {
+    background: #0b1220;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    overflow-x: auto;
+    color: #a5f3fc;
+    border: 1px solid rgba(96,165,250,0.15);
+    margin-bottom: 14px;
+  }
+  button {
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(59,130,246,0.4); }
+  .output {
+    margin-top: 12px;
+    background: #0b1220;
+    border-radius: 8px;
+    padding: 12px 14px;
+    min-height: 42px;
+    border-left: 3px solid #22c55e;
+    font-size: 0.88rem;
+    color: #bbf7d0;
+    max-height: 180px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .input-row input {
+    background: #0b1220;
+    border: 1px solid rgba(96,165,250,0.35);
+    color: #e2e8f0;
+    padding: 7px 12px;
+    border-radius: 6px;
+    width: 120px;
+    font-size: 0.88rem;
+  }
+  .input-row label { font-size: 0.88rem; color: #94a3b8; }
+  .dice {
+    display: inline-block;
+    font-size: 1.6rem;
+    padding: 4px 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="author">作者：张梓轩</div>
+  <h1>JavaScript 程序结构 · 条件 &amp; 循环</h1>
+
+  <div class="container">
+
+    <!-- if / else -->
+    <div class="card">
+      <div class="card-header">① if / else 条件判断 <span class="tag">分支结构</span></div>
+      <div class="card-body">
+<pre>let age = +document.getElementById('age').value;
+if (age >= 18) {
+  output = '已成年，可以进入网吧';
+} else if (age >= 12) {
+  output = '青少年，需要家长陪同';
+} else {
+  output = '儿童，禁止进入';
+}</pre>
+        <div class="input-row">
+          <label>输入年龄：</label>
+          <input id="age" type="number" value="20">
+          <button onclick="runIfElse()">运行判断</button>
+        </div>
+        <div id="out-ifelse" class="output">点击按钮查看结果</div>
+      </div>
+    </div>
+
+    <!-- switch -->
+    <div class="card">
+      <div class="card-header">② switch 多分支选择 <span class="tag">分支结构</span></div>
+      <div class="card-body">
+<pre>let day = ['日','一','二','三','四','五','六'][new Date().getDay()];
+switch (day) {
+  case '一': case '二': case '三':
+    msg = '新的一周，加油！'; break;
+  case '五':
+    msg = '周五啦，准备下班！'; break;
+  case '六': case '日':
+    msg = '周末愉快 🎉'; break;
+  default:
+    msg = '周四，再坚持一下';
+}</pre>
+        <button onclick="runSwitch()">查看今天问候</button>
+        <div id="out-switch" class="output">点击按钮查看结果</div>
+      </div>
+    </div>
+
+    <!-- for -->
+    <div class="card">
+      <div class="card-header">③ for 循环（1 到 n 的累加）<span class="tag">循环结构</span></div>
+      <div class="card-body">
+<pre>let sum = 0;
+for (let i = 1; i <= n; i++) {
+  sum += i;      // i 从 1 递增到 n
+}
+// 输出每一步与最终结果</pre>
+        <div class="input-row">
+          <label>n =</label>
+          <input id="forN" type="number" value="10">
+          <button onclick="runFor()">运行 for</button>
+        </div>
+        <div id="out-for" class="output">点击按钮查看结果</div>
+      </div>
+    </div>
+
+    <!-- while -->
+    <div class="card">
+      <div class="card-header">④ while 循环（掷骰子直到 6 点）<span class="tag">循环结构</span></div>
+      <div class="card-body">
+<pre>let count = 0, dice = 0;
+while (dice !== 6) {
+  dice = Math.floor(Math.random()*6)+1;
+  count++;
+  history += '第'+count+'次：掷出 '+dice+' ⬇\n';
+}
+history += '终于掷出 6 点！共 '+count+' 次';</pre>
+        <button onclick="runWhile()">🎲 开始掷骰子</button>
+        <div id="out-while" class="output">点击按钮开始掷骰子</div>
+      </div>
+    </div>
+
+    <!-- do-while -->
+    <div class="card">
+      <div class="card-header">⑤ do...while 循环（至少执行一次）<span class="tag">循环结构</span></div>
+      <div class="card-body">
+<pre>// do...while 无论条件如何，循环体至少跑一次
+let i = 5, text = '';
+do {
+  text += 'i = ' + i + '\n';
+  i++;
+} while (i < 3);  // 条件假，但体已执行一次</pre>
+        <button onclick="runDoWhile()">运行 do...while</button>
+        <div id="out-dowhile" class="output">点击按钮查看结果</div>
+      </div>
+    </div>
+
+    <!-- for...of / 数组遍历 -->
+    <div class="card">
+      <div class="card-header">⑥ for...of（数组遍历求和）<span class="tag">循环结构</span></div>
+      <div class="card-body">
+<pre>let nums = [3, 7, 2, 9, 5, 1, 8];
+let total = 0;
+for (let n of nums) {
+  total += n;       // 依次取出数组中的每个元素
+}
+// 也可用于字符串遍历每个字符</pre>
+        <button onclick="runForOf()">运行 for...of</button>
+        <div id="out-forof" class="output">点击按钮查看结果</div>
+      </div>
+    </div>
+
+    <!-- 嵌套循环 -->
+    <div class="card">
+      <div class="card-header">⑦ 嵌套 for（九九乘法表）<span class="tag">循环结构</span></div>
+      <div class="card-body">
+<pre>let table = '';
+for (let i = 1; i <= 9; i++) {
+  for (let j = 1; j <= i; j++) {
+    table += j + '×' + i + '=' + (i*j) + '\t';
+  }
+  table += '\n';
+}</pre>
+        <button onclick="runNested()">生成九九表</button>
+        <div id="out-nested" class="output" style="font-family:Consolas,monospace;">点击按钮查看结果</div>
+      </div>
+    </div>
+
+    <!-- break / continue -->
+    <div class="card">
+      <div class="card-header">⑧ break &amp; continue（跳过/跳出）<span class="tag">控制语句</span></div>
+      <div class="card-body">
+<pre>// continue：跳过本次迭代
+// break：直接终止循环
+let text = '';
+for (let i = 1; i <= 15; i++) {
+  if (i === 12) break;          // 到 12 就停
+  if (i % 3 === 0) continue;    // 跳过 3 的倍数
+  text += i + ' ';
+}</pre>
+        <button onclick="runBreakContinue()">运行 break/continue</button>
+        <div id="out-break" class="output">点击按钮查看结果</div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  function runIfElse() {
+    let age = +document.getElementById('age').value;
+    let out;
+    if (age >= 18)      out = '已成年，可以进入网吧';
+    else if (age >= 12) out = '青少年，需要家长陪同';
+    else                out = '儿童，禁止进入';
+    document.getElementById('out-ifelse').textContent = '输入年龄：' + age + '\n结果：' + out;
+  }
+
+  function runSwitch() {
+    let dayIdx = new Date().getDay();
+    let day = ['日','一','二','三','四','五','六'][dayIdx];
+    let msg;
+    switch (day) {
+      case '一': case '二': case '三': msg = '新的一周，加油！'; break;
+      case '五':                       msg = '周五啦，准备下班！'; break;
+      case '六': case '日':            msg = '周末愉快 🎉'; break;
+      default:                         msg = '周四，再坚持一下';
+    }
+    document.getElementById('out-switch').textContent = '今天是星期' + day + '\n问候语：' + msg;
+  }
+
+  function runFor() {
+    let n = +document.getElementById('forN').value || 10;
+    let sum = 0, steps = '';
+    for (let i = 1; i <= n; i++) {
+      sum += i;
+      steps += 'i=' + i + ' → sum=' + sum + '\n';
+    }
+    document.getElementById('out-for').textContent = steps + '总和 1..' + n + ' = ' + sum;
+  }
+
+  function runWhile() {
+    let count = 0, dice = 0, history = '';
+    while (dice !== 6) {
+      dice = Math.floor(Math.random() * 6) + 1;
+      count++;
+      history += '第 ' + count + ' 次：掷出 ' + dice + '\n';
+      if (count > 20) { history += '超过 20 次了还没出 6，强行停止'; break; }
+    }
+    history += '\n共 ' + count + ' 次掷出 6 点';
+    document.getElementById('out-while').textContent = history;
+  }
+
+  function runDoWhile() {
+    let i = 5, text = '';
+    do {
+      text += 'i = ' + i + '\n';
+      i++;
+    } while (i < 3);
+    text += '\n循环结束后 i = ' + i;
+    document.getElementById('out-dowhile').textContent = text;
+  }
+
+  function runForOf() {
+    let nums = [3, 7, 2, 9, 5, 1, 8];
+    let total = 0, each = '';
+    for (let n of nums) { total += n; each += n + ' + '; }
+    let str = 'hello';
+    let up = '';
+    for (let c of str) up += c.toUpperCase() + ' ';
+    document.getElementById('out-forof').textContent =
+      '数组 ' + JSON.stringify(nums) + '\n' +
+      each.replace(/\+ $/, '= ') + total + '\n\n' +
+      '字符串 "' + str + '" 遍历大写：' + up;
+  }
+
+  function runNested() {
+    let table = '';
+    for (let i = 1; i <= 9; i++) {
+      for (let j = 1; j <= i; j++) {
+        table += j + '×' + i + '=' + (i*j) + '\t';
+      }
+      table += '\n';
+    }
+    document.getElementById('out-nested').textContent = table;
+  }
+
+  function runBreakContinue() {
+    let text = '';
+    for (let i = 1; i <= 15; i++) {
+      if (i === 12)  { text += '(到 12 break)'; break; }
+      if (i % 3 === 0) { text += '(跳过' + i + ' continue) '; continue; }
+      text += i + ' ';
+    }
+    document.getElementById('out-break').textContent = text;
+  }
+</script>
+</body>
+</html>
