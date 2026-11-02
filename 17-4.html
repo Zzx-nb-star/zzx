@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>17-4 · 远程接口测试工具 - 张梓轩</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", "Consolas", sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #eaeaea;
+    padding: 28px 20px 40px;
+  }
+  .author { text-align: center; color: #f9a825; margin-bottom: 6px; letter-spacing: 2px; }
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    background: linear-gradient(90deg, #f9a825, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* 请求面板 */
+  .panel {
+    background: rgba(15, 12, 41, 0.85);
+    border: 1px solid rgba(249, 168, 37, 0.2);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  label.field { font-size: 0.85rem; color: #f9a825; width: 80px; flex-shrink: 0; }
+  select, input[type="text"], input[type="number"], textarea {
+    background: #1a1a2e;
+    border: 1px solid rgba(249, 168, 37, 0.3);
+    color: #eaeaea;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 0.88rem;
+    font-family: inherit;
+  }
+  select { cursor: pointer; }
+  input[type="text"] { flex: 1; min-width: 260px; }
+  textarea {
+    width: 100%;
+    min-height: 110px;
+    font-family: Consolas, monospace;
+    resize: vertical;
+  }
+  textarea:disabled { color: #777; background: #12121f; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  button {
+    background: linear-gradient(90deg, #f9a825, #ff6b6b);
+    color: #1a1a2e;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  button:hover { transform: translateY(-1px); }
+  button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  button.secondary {
+    background: #37474f;
+    color: #eceff1;
+  }
+
+  .preset {
+    background: rgba(249,168,37,0.1);
+    padding: 12px 14px;
+    border-radius: 9px;
+    border: 1px dashed rgba(249,168,37,0.35);
+    margin-bottom: 14px;
+  }
+  .preset .title { font-size: 0.8rem; color: #f9a825; margin-bottom: 8px; font-weight: bold; }
+  .preset button {
+    background: rgba(249,168,37,0.2);
+    color: #f9a825;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    margin: 3px;
+  }
+
+  /* 响应面板 */
+  .resp-bar {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    background: #1a1a2e;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    align-items: center;
+  }
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: bold;
+    font-size: 0.82rem;
+  }
+  .status-ok { background: #2ecc71; color: white; }
+  .status-warn { background: #f1c40f; color: #1a1a2e; }
+  .status-err { background: #e74c3c; color: white; }
+  .status-idle { background: #7f8c8d; color: white; }
+  .meta { color: #95a5a6; }
+  .meta b { color: #f9a825; }
+
+  .resp-body {
+    background: #0a0a14;
+    border: 1px solid rgba(249,168,37,0.2);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: Consolas, monospace;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    max-height: 420px;
+    overflow: auto;
+    white-space: pre-wrap;
+    color: #a3d9f7;
+  }
+  .resp-body.err { color: #ff6b6b; }
+  .resp-body.ok { color: #2ecc71; }
+  .section-title { font-size: 0.82rem; color: #f9a825; margin: 14px 0 6px; font-weight: bold; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+  <div class="author">作者：张梓轩</div>
+  <h1>远程接口测试工具</h1>
+
+  <div class="wrap">
+
+    <!-- 请求面板 -->
+    <div class="panel">
+      <div class="preset">
+        <div class="title">⚡ 快速预设（点击自动填入）</div>
+        <button onclick="applyPreset('get-users')">GET 用户 jsonplaceholder</button>
+        <button onclick="applyPreset('get-dog')">GET 随机狗图 dog.ceo</button>
+        <button onclick="applyPreset('get-products')">GET 商品 dummyjson</button>
+        <button onclick="applyPreset('post-create')">POST 新建帖子 jsonplaceholder</button>
+        <button onclick="applyPreset('put-update')">PUT 更新帖子</button>
+        <button onclick="applyPreset('del-remove')">DELETE 删除帖子</button>
+      </div>
+
+      <div class="row">
+        <label class="field">方法：</label>
+        <select id="method" onchange="toggleBody()">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="PATCH">PATCH</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label class="field">URL：</label>
+        <input type="text" id="url" placeholder="https://jsonplaceholder.typicode.com/posts">
+      </div>
+
+      <div class="row">
+        <label class="field">Headers：</label>
+        <input type="text" id="headers" placeholder='{"Content-Type": "application/json"}'>
+      </div>
+
+      <div>
+        <div class="section-title">Request Body（POST / PUT / PATCH 时启用）</div>
+        <textarea id="body" placeholder='{"title": "测试", "body": "hello", "userId": 1}'></textarea>
+      </div>
+
+      <div class="btn-row" style="margin-top:14px;">
+        <button id="sendBtn" onclick="sendRequest()">🚀 发送请求</button>
+        <button class="secondary" onclick="document.getElementById('url').value='';document.getElementById('body').value='';document.getElementById('headers').value='';">🧹 清空</button>
+      </div>
+    </div>
+
+    <!-- 响应面板 -->
+    <div class="panel">
+      <div class="section-title">📡 响应结果</div>
+      <div class="resp-bar">
+        <span class="status-badge status-idle" id="statusBadge">待请求</span>
+        <span class="meta">HTTP <b id="statusText">-</b></span>
+        <span class="meta">耗时 <b id="duration">-</b></span>
+        <span class="meta">大小 <b id="size">-</b></span>
+        <span class="meta">类型 <b id="ctype">-</b></span>
+      </div>
+
+      <div class="section-title">Response Body</div>
+      <pre class="resp-body" id="respBody">点击「发送请求」查看结果</pre>
+
+      <div class="section-title">请求头 &amp; 原始 Request（DEBUG）</div>
+      <pre class="resp-body" id="debugBody" style="max-height:200px;"></pre>
+    </div>
+
+  </div>
+
+<script>
+  function toggleBody() {
+    var m = document.getElementById('method').value;
+    var isPostLike = (m === 'POST' || m === 'PUT' || m === 'PATCH');
+    document.getElementById('body').disabled = !isPostLike;
+    if (!isPostLike) document.getElementById('body').value = '';
+  }
+
+  function applyPreset(which) {
+    var url = document.getElementById('url');
+    var method = document.getElementById('method');
+    var body = document.getElementById('body');
+    var headers = document.getElementById('headers');
+
+    switch (which) {
+      case 'get-users':
+        method.value = 'GET';
+        url.value = 'https://jsonplaceholder.typicode.com/users/1';
+        body.value = '';
+        headers.value = '';
+        break;
+      case 'get-dog':
+        method.value = 'GET';
+        url.value = 'https://dog.ceo/api/breeds/image/random';
+        body.value = '';
+        headers.value = '';
+        break;
+      case 'get-products':
+        method.value = 'GET';
+        url.value = 'https://dummyjson.com/products/1';
+        body.value = '';
+        headers.value = '';
+        break;
+      case 'post-create':
+        method.value = 'POST';
+        url.value = 'https://jsonplaceholder.typicode.com/posts';
+        body.value = '{\n  "title": "测试帖子",\n  "body": "这是一个通过 fetch POST 创建的帖子",\n  "userId": 1\n}';
+        headers.value = '{"Content-Type": "application/json"}';
+        break;
+      case 'put-update':
+        method.value = 'PUT';
+        url.value = 'https://jsonplaceholder.typicode.com/posts/1';
+        body.value = '{\n  "id": 1,\n  "title": "更新后的标题",\n  "body": "PUT 请求更新内容",\n  "userId": 1\n}';
+        headers.value = '{"Content-Type": "application/json"}';
+        break;
+      case 'del-remove':
+        method.value = 'DELETE';
+        url.value = 'https://jsonplaceholder.typicode.com/posts/1';
+        body.value = '';
+        headers.value = '';
+        break;
+    }
+    toggleBody();
+  }
+
+  function sizeOf(str) {
+    return new Blob([str]).size;
+  }
+
+  function sendRequest() {
+    var url = document.getElementById('url').value.trim();
+    var method = document.getElementById('method').value;
+    var bodyText = document.getElementById('body').value.trim();
+    var headersText = document.getElementById('headers').value.trim();
+    var sendBtn = document.getElementById('sendBtn');
+    var badge = document.getElementById('statusBadge');
+    var respBody = document.getElementById('respBody');
+    var debugBody = document.getElementById('debugBody');
+
+    if (!url) {
+      badge.className = 'status-badge status-err';
+      badge.textContent = '缺少 URL';
+      respBody.className = 'resp-body err';
+      respBody.textContent = '❌ 请先输入 URL';
+      return;
+    }
+
+    var opts = { method: method };
+
+    // headers
+    try {
+      if (headersText) {
+        opts.headers = JSON.parse(headersText);
+      }
+    } catch (e) {
+      badge.className = 'status-badge status-err';
+      badge.textContent = 'Headers JSON 错误';
+      respBody.className = 'resp-body err';
+      respBody.textContent = '❌ Headers 不是合法 JSON：' + e.message;
+      return;
+    }
+
+    // body
+    var isPostLike = (method === 'POST' || method === 'PUT' || method === 'PATCH');
+    if (isPostLike && bodyText) {
+      // 尝试校验是合法 JSON
+      try {
+        JSON.parse(bodyText);
+      } catch (e) {
+        badge.className = 'status-badge status-err';
+        badge.textContent = 'Body JSON 错误';
+        respBody.className = 'resp-body err';
+        respBody.textContent = '❌ Request Body 不是合法 JSON：' + e.message +
+          '\n\n💡 例如：{"name": "张梓轩"}';
+        return;
+      }
+      opts.body = bodyText;
+      // 如果没配 Content-Type，默认加上
+      if (!opts.headers || !opts.headers['Content-Type'] && !opts.headers['content-type']) {
+        opts.headers = Object.assign({}, opts.headers || {}, { 'Content-Type': 'application/json' });
+      }
+    }
+
+    // DEBUG 输出
+    debugBody.textContent =
+      '▶ ' + method + ' ' + url + '\n' +
+      (opts.headers ? 'Headers: ' + JSON.stringify(opts.headers, null, 2) + '\n' : '') +
+      (opts.body ? 'Body: ' + opts.body : '');
+
+    sendBtn.disabled = true;
+    badge.className = 'status-badge status-warn';
+    badge.textContent = '请求中...';
+    respBody.className = 'resp-body';
+    respBody.textContent = '⏳ 正在发送 ' + method + ' ' + url + ' ...';
+
+    var start = performance.now();
+
+    fetch(url, opts)
+      .then(function(response) {
+        var ms = (performance.now() - start).toFixed(0);
+        document.getElementById('duration').textContent = ms + ' ms';
+        document.getElementById('statusText').textContent = response.status + ' ' + response.statusText;
+        document.getElementById('ctype').textContent = response.headers.get('Content-Type') || '—';
+
+        if (response.ok) {
+          badge.className = 'status-badge status-ok';
+          badge.textContent = 'HTTP ' + response.status + ' OK';
+        } else if (response.status >= 400 && response.status < 500) {
+          badge.className = 'status-badge status-warn';
+          badge.textContent = 'HTTP ' + response.status + ' 客户端错误';
+        } else {
+          badge.className = 'status-badge status-err';
+          badge.textContent = 'HTTP ' + response.status + ' 服务器错误';
+        }
+
+        var ct = response.headers.get('Content-Type') || '';
+        return response.text().then(function(text) {
+          // 尝试 JSON 格式化
+          var pretty = text;
+          if (ct.indexOf('json') !== -1 || text.trim().charAt(0) === '{' || text.trim().charAt(0) === '[') {
+            try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch(e) { /* 保留原文 */ }
+          }
+          document.getElementById('size').textContent = sizeOf(text) + ' bytes';
+          respBody.className = 'resp-body ' + (response.ok ? 'ok' : 'err');
+          respBody.textContent = pretty || '(空响应体)';
+        });
+      })
+      .catch(function(err) {
+        var ms = (performance.now() - start).toFixed(0);
+        document.getElementById('duration').textContent = ms + ' ms';
+        document.getElementById('size').textContent = '—';
+        document.getElementById('ctype').textContent = '—';
+        document.getElementById('statusText').textContent = '—';
+        badge.className = 'status-badge status-err';
+        badge.textContent = '网络 / 跨域错误';
+        respBody.className = 'resp-body err';
+        respBody.textContent =
+          '❌ 请求失败：' + err.message +
+          '\n\n可能原因：' +
+          '\n  • 跨域 CORS 被浏览器拦截（接口未设置 Access-Control-Allow-Origin）' +
+          '\n  • URL 拼写错误 / 域名不存在' +
+          '\n  • 本地网络无法访问该域名' +
+          '\n  • HTTPS 混合内容（http 接口在 https 页面被拦截）';
+      })
+      .then(function() { sendBtn.disabled = false; });
+  }
+
+  // 回车自动发送
+  document.getElementById('url').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendRequest();
+  });
+</script>
+</body>
+</html>

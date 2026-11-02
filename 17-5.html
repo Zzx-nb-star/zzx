@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>17-5 · JavaScript 定时器 - 张梓轩</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #4a3a6a);
+    min-height: 100vh;
+    color: #e8e8e8;
+    padding: 32px 20px;
+  }
+  .author { text-align: center; color: #ffb74d; margin-bottom: 6px; letter-spacing: 2px; }
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 28px;
+    background: linear-gradient(90deg, #ffb74d, #ff7043);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 22px;
+  }
+  .card {
+    background: rgba(30, 30, 47, 0.85);
+    border: 1px solid rgba(255, 183, 77, 0.25);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .card-head {
+    padding: 12px 18px;
+    background: linear-gradient(90deg, rgba(255,183,77,0.2), rgba(255,112,67,0.15));
+    border-bottom: 1px solid rgba(255,183,77,0.25);
+    font-weight: bold;
+    color: #ffb74d;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card-head .tag { font-size: 0.7rem; padding: 2px 10px; background: rgba(255,183,77,0.2); border-radius: 999px; color: #ffe0b2; }
+  .card-body { padding: 18px; }
+  pre {
+    background: #0d0d1a;
+    border: 1px solid rgba(255,183,77,0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: Consolas, monospace;
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: #a3d9f7;
+    white-space: pre-wrap;
+    margin-bottom: 14px;
+    max-height: 220px;
+    overflow: auto;
+  }
+  button {
+    background: linear-gradient(90deg, #ffb74d, #ff7043);
+    color: #1a1a1a;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.88rem;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: transform 0.15s;
+  }
+  button:hover { transform: translateY(-1px); }
+  button.danger { background: #e74c3c; color: white; }
+  button.success { background: #2ecc71; color: white; }
+  .output {
+    background: #0d0d1a;
+    border-left: 3px solid #ffb74d;
+    border-radius: 6px;
+    padding: 12px 14px;
+    min-height: 40px;
+    font-size: 0.88rem;
+    font-family: Consolas, monospace;
+    max-height: 180px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+  .big-display {
+    text-align: center;
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin: 16px 0;
+    font-family: Consolas, monospace;
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, #ffb74d, #ff7043);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .progress {
+    width: 100%; height: 10px;
+    background: #0d0d1a;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  .progress .bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ffb74d, #ff7043);
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+  .color-box {
+    width: 100px; height: 100px;
+    border-radius: 10px;
+    margin: 14px auto;
+    transition: background 0.08s linear;
+    border: 2px solid rgba(255,183,77,0.4);
+  }
+  .input-row { display: flex; gap: 8px; align-items: center; margin: 10px 0; flex-wrap: wrap; }
+  .input-row label { font-size: 0.85rem; color: #ffb74d; }
+  .input-row input {
+    background: #0d0d1a;
+    border: 1px solid rgba(255,183,77,0.3);
+    color: #e8e8e8;
+    padding: 6px 10px;
+    border-radius: 5px;
+    width: 80px;
+    font-family: Consolas, monospace;
+  }
+</style>
+</head>
+<body>
+  <div class="author">作者：张梓轩</div>
+  <h1>JavaScript 定时器</h1>
+
+  <div class="wrap">
+
+    <!-- ① setInterval 时钟 -->
+    <div class="card">
+      <div class="card-head">① setInterval — 重复执行 <span class="tag">setInterval / clearInterval</span></div>
+      <div class="card-body">
+<pre>// 每 1000ms 执行一次
+var timer = setInterval(function() {
+  clock.textContent = new Date().toLocaleTimeString();
+}, 1000);
+
+// 停止
+clearInterval(timer);</pre>
+        <div class="big-display" id="clock">--:--:--</div>
+        <div style="text-align:center;">
+          <button class="success" onclick="startClock()">▶ 开始</button>
+          <button class="danger" onclick="stopClock()">■ 停止</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② setTimeout 延迟执行 -->
+    <div class="card">
+      <div class="card-head">② setTimeout — 延迟执行一次 <span class="tag">setTimeout / clearTimeout</span></div>
+      <div class="card-body">
+<pre>// 3 秒后执行一次
+var t = setTimeout(function() {
+  out.textContent = '⏰ 3 秒时间到！';
+}, 3000);</pre>
+        <div class="input-row">
+          <label>延迟 (ms)：</label>
+          <input type="number" id="delayMs" value="3000" min="100">
+          <button onclick="runTimeout()">⏳ 启动</button>
+          <button class="danger" onclick="clearTimeout(window._demoT); document.getElementById('toOut').textContent='已取消'">✖ 取消</button>
+        </div>
+        <div class="output" id="toOut">点击「启动」按钮，延迟时间到后会显示消息</div>
+      </div>
+    </div>
+
+    <!-- ③ 进度条 -->
+    <div class="card">
+      <div class="card-head">③ 进度条（setInterval + 清除）<span class="tag">实际运用</span></div>
+      <div class="card-body">
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <div class="big-display" id="pct" style="font-size:1.8rem;">0%</div>
+        <button class="success" onclick="startProgress()">▶ 开始加载</button>
+        <button class="danger" onclick="stopProgress()">■ 取消</button>
+        <button onclick="resetProgress()">↺ 重置</button>
+        <div class="output" id="pLog" style="margin-top:10px;">点击「开始加载」观察进度条变化</div>
+      </div>
+    </div>
+
+    <!-- ④ 倒计时 -->
+    <div class="card">
+      <div class="card-head">④ 倒计时（setInterval + clear）<span class="tag">实际运用</span></div>
+      <div class="card-body">
+        <div class="big-display" id="countdown">10</div>
+        <div style="text-align:center;">
+          <button class="success" onclick="startCountdown(10)">▶ 从 10 倒计时</button>
+          <button onclick="startCountdown(5)">▶ 从 5 倒计时</button>
+          <button class="danger" onclick="stopCountdown()">■ 停止</button>
+        </div>
+        <div class="output" id="cdLog" style="margin-top:10px;">点击按钮开始倒计时</div>
+      </div>
+    </div>
+
+    <!-- ⑤ 颜色渐变 -->
+    <div class="card">
+      <div class="card-head">⑤ setInterval 连续动画 <span class="tag">颜色循环</span></div>
+      <div class="card-body">
+        <div class="color-box" id="colorBox" style="background:#ffb74d;"></div>
+        <div style="text-align:center;">
+          <button class="success" onclick="startRainbow()">🌈 开始变色</button>
+          <button class="danger" onclick="stopRainbow()">■ 停止</button>
+        </div>
+        <div class="output" id="rainbowLog" style="margin-top:10px;">setInterval 改背景色 → 产生动画</div>
+      </div>
+    </div>
+
+    <!-- ⑥ 两者嵌套 / 清理 -->
+    <div class="card">
+      <div class="card-head">⑥ 嵌套与清理（重要！）<span class="tag">坑点提醒</span></div>
+      <div class="card-body">
+<pre>// ❌ 坑：每次 setInterval 又套 setTimeout
+//    会生成越来越多的定时器，内存泄漏
+setInterval(function() {
+  setTimeout(fn, 1000);
+}, 1000);
+
+// ✅ 对的：定时器都要有 id，存起来
+var id = setInterval(fn, 1000);
+clearInterval(id);   // 组件销毁 / 页面离开时清理</pre>
+        <button onclick="demoClear()">▶ 演示：跑 3 秒后自动清理</button>
+        <div class="output" id="clearLog" style="margin-top:10px;">点击按钮观察清理过程</div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  // ① 时钟
+  var clockId = null;
+  function startClock() {
+    if (clockId) return;
+    clockId = setInterval(function() {
+      document.getElementById('clock').textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+    }, 1000);
+  }
+  function stopClock() {
+    clearInterval(clockId);
+    clockId = null;
+  }
+  startClock();
+
+  // ② setTimeout
+  function runTimeout() {
+    var ms = parseInt(document.getElementById('delayMs').value) || 3000;
+    var out = document.getElementById('toOut');
+    out.textContent = '⏳ 等待 ' + ms + ' ms ...';
+    out.className = 'output';
+    clearTimeout(window._demoT);
+    window._demoT = setTimeout(function() {
+      out.textContent = '⏰ 时间到！延迟 ' + ms + ' ms 后触发 ✓';
+      out.className = 'output';
+    }, ms);
+  }
+
+  // ③ 进度条
+  var progressId = null;
+  var progressVal = 0;
+  function startProgress() {
+    if (progressId) return;
+    progressVal = 0;
+    document.getElementById('bar').style.width = '0%';
+    document.getElementById('pct').textContent = '0%';
+    var log = document.getElementById('pLog');
+    log.textContent = '开始加载...';
+    progressId = setInterval(function() {
+      progressVal += 2;
+      if (progressVal >= 100) {
+        progressVal = 100;
+        document.getElementById('bar').style.width = '100%';
+        document.getElementById('pct').textContent = '100%';
+        log.textContent += '\n✅ 加载完成！自动清除 interval（id=' + progressId + '）';
+        clearInterval(progressId);
+        progressId = null;
+      } else {
+        document.getElementById('bar').style.width = progressVal + '%';
+        document.getElementById('pct').textContent = progressVal + '%';
+      }
+    }, 60);
+  }
+  function stopProgress() {
+    if (progressId) {
+      clearInterval(progressId);
+      document.getElementById('pLog').textContent += '\n■ 用户取消，clearInterval(' + progressId + ')';
+      progressId = null;
+    }
+  }
+  function resetProgress() {
+    stopProgress();
+    progressVal = 0;
+    document.getElementById('bar').style.width = '0%';
+    document.getElementById('pct').textContent = '0%';
+    document.getElementById('pLog').textContent = '已重置';
+  }
+
+  // ④ 倒计时
+  var cdId = null;
+  function startCountdown(n) {
+    stopCountdown();
+    var el = document.getElementById('countdown');
+    var log = document.getElementById('cdLog');
+    el.textContent = n;
+    log.textContent = '从 ' + n + ' 开始倒计时...';
+    cdId = setInterval(function() {
+      n--;
+      el.textContent = n;
+      if (n <= 0) {
+        el.textContent = '🎉';
+        log.textContent += '\n✅ 倒计时结束，clearInterval(' + cdId + ')';
+        clearInterval(cdId);
+        cdId = null;
+      }
+    }, 1000);
+  }
+  function stopCountdown() {
+    if (cdId) {
+      clearInterval(cdId);
+      document.getElementById('cdLog').textContent += '\n■ 手动停止';
+      cdId = null;
+    }
+  }
+
+  // ⑤ 彩虹色
+  var rbId = null;
+  var hue = 0;
+  function startRainbow() {
+    if (rbId) return;
+    rbId = setInterval(function() {
+      hue = (hue + 3) % 360;
+      document.getElementById('colorBox').style.background = 'hsl(' + hue + ', 80%, 60%)';
+      document.getElementById('rainbowLog').textContent =
+        '当前 HSL(' + hue + ', 80%, 60%)  interval id=' + rbId;
+    }, 40);
+  }
+  function stopRainbow() {
+    if (rbId) {
+      clearInterval(rbId);
+      document.getElementById('rainbowLog').textContent += '  ■ 已停止';
+      rbId = null;
+    }
+  }
+
+  // ⑥ 清理演示
+  function demoClear() {
+    var log = document.getElementById('clearLog');
+    var count = 0;
+    log.textContent = '启动一个 setInterval...';
+    var id = setInterval(function() {
+      count++;
+      log.textContent = '第 ' + count + ' 次触发（id=' + id + '）';
+      if (count >= 3) {
+        clearInterval(id);
+        log.textContent += '\n✅ 跑了 3 次后 clearInterval(' + id + ') 清理，不会继续跑';
+      }
+    }, 600);
+  }
+</script>
+</body>
+</html>
