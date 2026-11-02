@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>17-2 · fetch 获取跨域接口数据 - 张梓轩</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    min-height: 100vh;
+    color: #ecf0f1;
+    padding: 32px 20px;
+  }
+  .author { text-align: center; color: #ffd87a; margin-bottom: 6px; letter-spacing: 2px; }
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 28px;
+    background: linear-gradient(90deg, #ffd87a, #e74c3c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 22px;
+  }
+  .card {
+    background: rgba(44, 62, 80, 0.85);
+    border: 1px solid rgba(255, 216, 122, 0.25);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .card-head {
+    padding: 12px 18px;
+    background: linear-gradient(90deg, rgba(255,216,122,0.2), rgba(231,76,60,0.15));
+    border-bottom: 1px solid rgba(255,216,122,0.25);
+    font-weight: bold;
+    color: #ffd87a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-head .tag { font-size: 0.7rem; padding: 2px 10px; background: rgba(255,216,122,0.2); border-radius: 999px; color: #ffe8a8; }
+  .card-body { padding: 16px 18px; }
+  pre {
+    background: #151d26;
+    border: 1px solid rgba(255,216,122,0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: Consolas, monospace;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: #a3d9f7;
+    white-space: pre-wrap;
+    margin-bottom: 12px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  button {
+    background: linear-gradient(90deg, #ffd87a, #e74c3c);
+    color: #1a1a1a;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.88rem;
+    margin-right: 8px;
+    transition: transform 0.15s;
+  }
+  button:hover { transform: translateY(-1px); }
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
+  .endpoint {
+    display: block;
+    background: #151d26;
+    padding: 9px 13px;
+    border-radius: 7px;
+    font-family: Consolas, monospace;
+    font-size: 0.8rem;
+    color: #ffd87a;
+    margin-bottom: 12px;
+    word-break: break-all;
+  }
+  .status { font-size: 0.82rem; margin-top: 8px; }
+  .ok { color: #2ecc71; }
+  .err { color: #e74c3c; }
+  .dog-stage {
+    text-align: center;
+    padding: 20px;
+    background: #151d26;
+    border-radius: 10px;
+    margin-top: 10px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dog-stage img {
+    max-width: 100%;
+    max-height: 380px;
+    border-radius: 10px;
+    border: 2px solid rgba(255,216,122,0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .dog-stage .placeholder {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+  }
+  .dog-stage .loading {
+    color: #ffd87a;
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+  .breed-tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 12px;
+    background: rgba(255,216,122,0.2);
+    border-radius: 999px;
+    color: #ffd87a;
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+  <div class="author">作者：张梓轩</div>
+  <h1>fetch 获取跨域接口数据</h1>
+
+  <div class="wrap">
+
+    <!-- dog.ceo 随机狗图 -->
+    <div class="card">
+      <div class="card-head">① 随机狗狗图片（Promise 链式）<span class="tag">dog.ceo</span></div>
+      <div class="card-body">
+        <span class="endpoint">GET https://dog.ceo/api/breeds/image/random</span>
+        <button id="btn1" onclick="fetchDog()">🐕 随机一只狗</button>
+        <button onclick="fetchDogMultiple()">🐶 一次来 4 只</button>
+        <div id="s1" class="status"></div>
+        <div class="dog-stage" id="stage1">
+          <span class="placeholder">点击按钮获取狗狗图片 🐾</span>
+        </div>
+        <pre id="raw1" style="min-height:60px;max-height:120px;margin-top:10px;"></pre>
+      </div>
+    </div>
+
+    <!-- async/await -->
+    <div class="card">
+      <div class="card-head">② async / await 写法 <span class="tag">更简洁</span></div>
+      <div class="card-body">
+        <span class="endpoint">GET https://dog.ceo/api/breeds/image/random</span>
+        <button onclick="fetchDogAsync()">🚀 async/await 写法</button>
+        <div class="dog-stage" id="stage2">
+          <span class="placeholder">点击按钮查看 async/await 方式</span>
+        </div>
+        <pre id="raw2" style="min-height:60px;max-height:120px;"></pre>
+      </div>
+    </div>
+
+    <!-- 指定品种 -->
+    <div class="card">
+      <div class="card-head">③ 指定品种随机图 <span class="tag">dog.ceo 品种接口</span></div>
+      <div class="card-body">
+        <span class="endpoint">GET https://dog.ceo/api/breed/{品种}/images/random</span>
+        <div style="margin-bottom:12px;">
+          <select id="breedSelect" style="background:#151d26;color:#ecf0f1;border:1px solid rgba(255,216,122,0.3);border-radius:6px;padding:7px 10px;margin-right:8px;">
+            <option value="shiba">柴犬 Shiba</option>
+            <option value="husky">哈士奇 Husky</option>
+            <option value="poodle">贵宾 Poodle</option>
+            <option value="bulldog">斗牛犬 Bulldog</option>
+            <option value="beagle">比格 Beagle</option>
+            <option value="corgi">柯基 Corgi</option>
+            <option value="dalmatian">斑点狗 Dalmatian</option>
+            <option value="sheepdog">牧羊犬 Sheepdog</option>
+          </select>
+          <button onclick="fetchBreed()">🎯 按品种获取</button>
+        </div>
+        <div class="dog-stage" id="stage3">
+          <span class="placeholder">选一个品种点按钮试试 🐾</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 错误处理 -->
+    <div class="card">
+      <div class="card-head">④ fetch 错误处理 <span class="tag">try...catch + response.ok</span></div>
+      <div class="card-body">
+        <div class="hint" style="font-size:0.85rem;color:#bdc3c7;margin-bottom:10px;">
+          fetch 不会把 HTTP 404/500 抛异常，必须手动检查 <code>response.ok</code>。
+        </div>
+        <span class="endpoint">GET https://dog.ceo/api/breed/not-a-real-breed/images/random</span>
+        <button onclick="fetchError()">❓ 请求不存在的品种</button>
+        <pre id="errOut" style="min-height:160px;">点击按钮查看错误处理</pre>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  // 1. Promise 链式
+  function fetchDog() {
+    var stage = document.getElementById('stage1');
+    var btn = document.getElementById('btn1');
+    btn.disabled = true;
+    stage.innerHTML = '<span class="loading">⏳ 请求中...</span>';
+    document.getElementById('s1').textContent = '';
+
+    fetch('https://dog.ceo/api/breeds/image/random')
+      .then(function(response) {
+        document.getElementById('s1').textContent =
+          '✅ HTTP ' + response.status + '  ' + response.statusText;
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.json();
+      })
+      .then(function(data) {
+        // dog.ceo 返回 { message: "图片URL", status: "success" }
+        document.getElementById('raw1').textContent =
+          '返回 JSON：\n' + JSON.stringify(data, null, 2);
+
+        if (data.status !== 'success') {
+          stage.innerHTML = '<span class="err">接口返回失败：' + data.status + '</span>';
+          return;
+        }
+        var url = data.message;
+        // 从 URL 提取品种名（images.dog.ceo/breeds/{品种}/xxx.jpg）
+        var breed = '未知品种';
+        var m = url.match(/breeds\/([^/]+)/);
+        if (m) breed = m[1].replace('-', ' ');
+
+        stage.innerHTML =
+          '<img src="' + url + '" alt="随机狗狗" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+          '<span class="err" style="display:none;">图片加载失败</span>' +
+          '<div class="breed-tag">🐾 ' + breed + '</div>';
+      })
+      .catch(function(err) {
+        stage.innerHTML = '<span class="err">❌ 错误：' + err.message + '</span>';
+      })
+      .then(function() { btn.disabled = false; });
+  }
+
+  // 1b. 一次 4 只
+  function fetchDogMultiple() {
+    var stage = document.getElementById('stage1');
+    stage.innerHTML = '<span class="loading">⏳ 请求 4 只狗狗...</span>';
+    // Promise.all 并行请求
+    Promise.all([
+      fetch('https://dog.ceo/api/breeds/image/random').then(function(r){return r.json();}),
+      fetch('https://dog.ceo/api/breeds/image/random').then(function(r){return r.json();}),
+      fetch('https://dog.ceo/api/breeds/image/random').then(function(r){return r.json();}),
+      fetch('https://dog.ceo/api/breeds/image/random').then(function(r){return r.json();})
+    ]).then(function(results) {
+      var html = results.map(function(d) {
+        var breed = '未知';
+        var m = d.message.match(/breeds\/([^/]+)/);
+        if (m) breed = m[1].replace('-', ' ');
+        return '<div style="display:inline-block;margin:6px;"><img src="' + d.message + '" style="width:140px;height:140px;object-fit:cover;border-radius:8px;border:2px solid rgba(255,216,122,0.4);"><br><span class="breed-tag">' + breed + '</span></div>';
+      }).join('');
+      stage.innerHTML = html;
+    }).catch(function(e) {
+      stage.innerHTML = '<span class="err">❌ ' + e.message + '</span>';
+    });
+  }
+
+  // 2. async / await
+  async function fetchDogAsync() {
+    var stage = document.getElementById('stage2');
+    stage.innerHTML = '<span class="loading">⏳ async/await 请求中...</span>';
+    try {
+      var response = await fetch('https://dog.ceo/api/breeds/image/random');
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      var data = await response.json();
+
+      document.getElementById('raw2').textContent =
+        '✅ async/await 写法成功\n\n' + JSON.stringify(data, null, 2);
+
+      var breed = '未知品种';
+      var m = data.message.match(/breeds\/([^/]+)/);
+      if (m) breed = m[1].replace('-', ' ');
+
+      stage.innerHTML =
+        '<img src="' + data.message + '" alt="狗狗">' +
+        '<div class="breed-tag">🐾 ' + breed + '</div>';
+    } catch (err) {
+      stage.innerHTML = '<span class="err">❌ catch 捕获：' + err.message + '</span>';
+    }
+  }
+
+  // 3. 按品种
+  function fetchBreed() {
+    var breed = document.getElementById('breedSelect').value;
+    var stage = document.getElementById('stage3');
+    stage.innerHTML = '<span class="loading">⏳ 获取 ' + breed + ' ...</span>';
+    fetch('https://dog.ceo/api/breed/' + breed + '/images/random')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.status !== 'success') {
+          stage.innerHTML = '<span class="err">接口返回：' + data.status + '</span>';
+          return;
+        }
+        stage.innerHTML =
+          '<img src="' + data.message + '" alt="' + breed + '">' +
+          '<div class="breed-tag">🎯 ' + breed + '</div>';
+      })
+      .catch(function(e) {
+        stage.innerHTML = '<span class="err">❌ ' + e.message + '</span>';
+      });
+  }
+
+  // 4. 错误处理
+  function fetchError() {
+    var pre = document.getElementById('errOut');
+    pre.textContent = '⏳ 请求不存在的品种...\n';
+    fetch('https://dog.ceo/api/breed/not-a-real-breed/images/random')
+      .then(function(response) {
+        pre.textContent += 'HTTP status: ' + response.status + '  ok=' + response.ok + '\n';
+        // dog.ceo 即使品种不存在也返回 200，status 字段标失败
+        return response.json();
+      })
+      .then(function(data) {
+        pre.textContent += 'JSON status: ' + data.status + '\n';
+        pre.textContent += 'JSON message: ' + data.message + '\n\n';
+        pre.textContent += '💡 结论：fetch 不抛异常时，还要检查业务层字段（如 status）';
+      })
+      .catch(function(e) {
+        pre.textContent += '❌ 网络错误：' + e.message;
+      });
+  }
+</script>
+</body>
+</html>
